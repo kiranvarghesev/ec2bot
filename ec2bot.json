@@ -1,0 +1,329 @@
+{
+  "name": "ElasticCloudComputeManager",
+  "description": "Launch EC2 Instances with Lex",
+  "intents": [
+    {
+      "intentName": "Count",
+      "intentVersion": "3"
+    },
+    {
+      "intentName": "LaunchInstance",
+      "intentVersion": "12"
+    },
+    {
+      "intentName": "Status",
+      "intentVersion": "4"
+    }
+  ],
+  "clarificationPrompt": {
+    "messages": [
+      {
+        "contentType": "PlainText",
+        "content": "Sorry, can you please repeat that?"
+      }
+    ],
+    "maxAttempts": 5,
+    "responseCard": null
+  },
+  "abortStatement": {
+    "messages": [
+      {
+        "contentType": "PlainText",
+        "content": "Sorry, I could not understand. Goodbye."
+      }
+    ],
+    "responseCard": null
+  },
+  "status": "READY",
+  "failureReason": null,
+  "lastUpdatedDate": "2017-07-18T01:10:02.414Z",
+  "createdDate": "2017-07-15T17:20:38.186Z",
+  "idleSessionTTLInSeconds": 300,
+  "voiceId": "Joanna",
+  "checksum": "76912cb8-5813-4dbb-9b67-0af8ec5f091a",
+  "version": "$LATEST",
+  "locale": "en-US",
+  "childDirected": false,
+  "dependencies": {
+    "intents": [
+      {
+        "name": "Count",
+        "description": null,
+        "slots": [],
+        "sampleUtterances": [
+          "How many instances do I have running",
+          "What is the number of running instances"
+        ],
+        "fulfillmentActivity": {
+          "type": "CodeHook",
+          "codeHook": {
+            "uri": "arn:aws:lambda:us-east-1:022208951238:function:lex_ec2",
+            "messageVersion": "1.0"
+          }
+        },
+        "parentIntentSignature": null,
+        "lastUpdatedDate": "2017-07-17T19:15:30.502Z",
+        "createdDate": "2017-07-17T19:15:30.502Z",
+        "version": "3",
+        "checksum": "afaa7e04-7236-4000-8e07-5c92f25c3c07"
+      },
+      {
+        "name": "LaunchInstance",
+        "description": null,
+        "slots": [
+          {
+            "name": "STORAGE",
+            "description": null,
+            "slotConstraint": "Required",
+            "slotType": "StorageTypes",
+            "slotTypeVersion": "1",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "What type of storage should I use? Magnetic, provisioned, or general purpose?"
+                },
+                {
+                  "contentType": "PlainText",
+                  "content": "What type of storage do you want? Magnetic, provisioned, or general purpose?"
+                }
+              ],
+              "maxAttempts": 2,
+              "responseCard": "{\"version\":1,\"contentType\":\"application/vnd.amazonaws.card.generic\"}"
+            },
+            "priority": 4,
+            "sampleUtterances": [
+              "I want {STORAGE}",
+              "Use {STORAGE}"
+            ],
+            "responseCard": null
+          },
+          {
+            "name": "NUMBER",
+            "description": null,
+            "slotConstraint": "Required",
+            "slotType": "NumberTypes",
+            "slotTypeVersion": "1",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "How many instances do you need? (Max of 5)"
+                },
+                {
+                  "contentType": "PlainText",
+                  "content": "How many instances should I launch? (Max of 5)"
+                }
+              ],
+              "maxAttempts": 2,
+              "responseCard": "{\"version\":1,\"contentType\":\"application/vnd.amazonaws.card.generic\",\"genericAttachments\":[{\"subTitle\":\"Number of instances to launch\",\"title\":\"Instance Count\",\"buttons\":[{\"text\":\"1\",\"value\":\"1\"},{\"text\":\"2\",\"value\":\"2\"},{\"text\":\"3\",\"value\":\"3\"}]}]}"
+            },
+            "priority": 3,
+            "sampleUtterances": [
+              "Launch {NUMBER}",
+              "I need {NUMBER}"
+            ],
+            "responseCard": null
+          },
+          {
+            "name": "TYPE",
+            "description": null,
+            "slotConstraint": "Required",
+            "slotType": "InstanceTypes",
+            "slotTypeVersion": "3",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "Which instance type should I use? The options are t2micro, t2small, t2medium."
+                },
+                {
+                  "contentType": "PlainText",
+                  "content": "Which instance type do you want? The options are t2micro, t2small, t2medium."
+                }
+              ],
+              "maxAttempts": 2,
+              "responseCard": "{\"version\":1,\"contentType\":\"application/vnd.amazonaws.card.generic\",\"genericAttachments\":[{\"imageUrl\":\"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/AWS_Simple_Icons_Compute_Amazon_EC2_Instances.svg/200px-AWS_Simple_Icons_Compute_Amazon_EC2_Instances.svg.png\",\"subTitle\":\"Choose an instance type\",\"title\":\"Instance\",\"buttons\":[{\"text\":\"t2micro\",\"value\":\"t2micro\"},{\"text\":\"t2small\",\"value\":\"t2small\"},{\"text\":\"t2medium\",\"value\":\"t2medium\"}]}]}"
+            },
+            "priority": 2,
+            "sampleUtterances": [
+              "I want {TYPE}",
+              "Use {TYPE}"
+            ],
+            "responseCard": null
+          },
+          {
+            "name": "AMI",
+            "description": null,
+            "slotConstraint": "Required",
+            "slotType": "AMITypes",
+            "slotTypeVersion": "2",
+            "valueElicitationPrompt": {
+              "messages": [
+                {
+                  "contentType": "PlainText",
+                  "content": "Which AMI should I use? The options are Ubuntu, Red Hat, Windows, and Amazon Linux."
+                }
+              ],
+              "maxAttempts": 2,
+              "responseCard": "{\"version\":1,\"contentType\":\"application/vnd.amazonaws.card.generic\",\"genericAttachments\":[{\"imageUrl\":\"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/AWS_Simple_Icons_Compute_Amazon_EC2_AMI.svg/2000px-AWS_Simple_Icons_Compute_Amazon_EC2_AMI.svg.png\",\"subTitle\":\"Choose an AMI type\",\"title\":\"AMI\",\"buttons\":[{\"text\":\"Ubuntu\",\"value\":\"Ubuntu\"},{\"text\":\"Red Hat\",\"value\":\"Red Hat\"},{\"text\":\"Windows\",\"value\":\"Windows\"},{\"text\":\"Amazon Linux\",\"value\":\"Amazon Linux\"}]}]}"
+            },
+            "priority": 1,
+            "sampleUtterances": [
+              "Use {AMI}"
+            ],
+            "responseCard": null
+          }
+        ],
+        "sampleUtterances": [
+          "Launch an instance",
+          "I need a new instance",
+          "I want to start a new instance",
+          "Launch instance"
+        ],
+        "confirmationPrompt": {
+          "messages": [
+            {
+              "contentType": "PlainText",
+              "content": "You want to launch {NUMBER} {TYPE} EC2 instances running {AMI}, using {STORAGE} storage, is this correct?"
+            }
+          ],
+          "maxAttempts": 3,
+          "responseCard": null
+        },
+        "rejectionStatement": {
+          "messages": [
+            {
+              "contentType": "PlainText",
+              "content": "Okay, your instance has been cancelled"
+            }
+          ],
+          "responseCard": null
+        },
+        "fulfillmentActivity": {
+          "type": "CodeHook",
+          "codeHook": {
+            "uri": "arn:aws:lambda:us-east-1:022208951238:function:lex_ec2",
+            "messageVersion": "1.0"
+          }
+        },
+        "parentIntentSignature": null,
+        "lastUpdatedDate": "2017-07-18T01:09:37.739Z",
+        "createdDate": "2017-07-18T01:09:37.739Z",
+        "version": "12",
+        "checksum": "852915bc-3ea4-423a-8446-1f2b12bb9f12"
+      },
+      {
+        "name": "Status",
+        "description": null,
+        "slots": [],
+        "sampleUtterances": [
+          "Instance report",
+          "What is the status of my instances",
+          "Do I have any unhealthy instances",
+          "How are my instances doing",
+          "Instance state"
+        ],
+        "fulfillmentActivity": {
+          "type": "CodeHook",
+          "codeHook": {
+            "uri": "arn:aws:lambda:us-east-1:022208951238:function:lex_ec2",
+            "messageVersion": "1.0"
+          }
+        },
+        "parentIntentSignature": null,
+        "lastUpdatedDate": "2017-07-17T20:32:05.854Z",
+        "createdDate": "2017-07-17T20:32:05.854Z",
+        "version": "4",
+        "checksum": "d3d0bb6d-894b-4d27-b312-8e623b9e0bfe"
+      }
+    ],
+    "slotTypes": [
+      {
+        "name": "NumberTypes",
+        "description": "Number of Instances",
+        "enumerationValues": [
+          {
+            "value": "1"
+          },
+          {
+            "value": "2"
+          },
+          {
+            "value": "3"
+          },
+          {
+            "value": "4"
+          },
+          {
+            "value": "5"
+          }
+        ],
+        "lastUpdatedDate": "2017-07-15T17:56:13.598Z",
+        "createdDate": "2017-07-15T17:56:13.598Z",
+        "version": "1",
+        "checksum": null
+      },
+      {
+        "name": "StorageTypes",
+        "description": "Storage Types",
+        "enumerationValues": [
+          {
+            "value": "Magnetic"
+          },
+          {
+            "value": "Provisioned"
+          },
+          {
+            "value": "General purpose"
+          }
+        ],
+        "lastUpdatedDate": "2017-07-15T17:56:13.757Z",
+        "createdDate": "2017-07-15T17:56:13.757Z",
+        "version": "1",
+        "checksum": null
+      },
+      {
+        "name": "AMITypes",
+        "description": "AMI types",
+        "enumerationValues": [
+          {
+            "value": "Ubuntu"
+          },
+          {
+            "value": "Red Hat"
+          },
+          {
+            "value": "Windows"
+          },
+          {
+            "value": "Amazon Linux"
+          }
+        ],
+        "lastUpdatedDate": "2017-07-15T17:56:13.685Z",
+        "createdDate": "2017-07-15T17:56:13.685Z",
+        "version": "2",
+        "checksum": null
+      },
+      {
+        "name": "InstanceTypes",
+        "description": "Instance Types",
+        "enumerationValues": [
+          {
+            "value": "t2micro"
+          },
+          {
+            "value": "t2small"
+          },
+          {
+            "value": "t2medium"
+          }
+        ],
+        "lastUpdatedDate": "2017-07-17T21:15:52.807Z",
+        "createdDate": "2017-07-17T21:15:52.807Z",
+        "version": "3",
+        "checksum": null
+      }
+    ]
+  }
+}
