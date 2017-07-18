@@ -21,4 +21,4 @@ EC2Bot is a way to easily manage EC2 instances via Slack or with voice commands.
 }
 ```
 
-2. Recreate the AWS Lex intents and slots using the "ec2boy.json" file.
+2. Recreate the AWS Lex intents and slots using the "ec2bot.json" file.
